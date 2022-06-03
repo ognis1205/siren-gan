@@ -21,9 +21,6 @@ def download_google_drive(id, path):
         params = { 'id' : id },
         stream = True)
     token = get_token(response)
-    print(response)
-    print(response.headers)
-    print(token)
     if token:
         response = session.get(
             URL, 
