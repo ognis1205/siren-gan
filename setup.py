@@ -1,10 +1,13 @@
-from setuptools import find_packages, setup
+from setuptools import setup, find_packages
+from pkg_resources import parse_requirements
+
 
 setup(
-    name='src',
-    packages=find_packages(),
-    version='0.1.0',
-    description='PoC Project of SIREN GAN',
-    author='Shingo OKAWA',
-    license='MIT',
-)
+    name="siren",
+    version="0.1.0",
+    description="SIREN: SIREN Based Compositional Pattern Producing Network",
+    author="Shingo OKAWA",
+    python_requires="==3.8.*",
+    install_requires=[
+    ],
+    packages=find_packages(exclude=["test", "test.*"]))
