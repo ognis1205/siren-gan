@@ -136,11 +136,9 @@ class Model:
         self.channels = channels
         self.G = Generator(self.latent_size, self.channels)
         self.D = Discriminator(self.channels)
-        self.loss = nn.BCELoss()
         if self.cuda_enabled:
             self.D.cuda(self.cuda_index)
             self.G.cuda(self.cuda_index)
-            self.loss = nn.BCELoss().cuda(self.cuda_index)
 
     def save(self, path):
         path = Path(path).expanduser()
