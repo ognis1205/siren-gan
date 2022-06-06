@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+from pathlib import Path
 
 
 class Generator(nn.Module):
@@ -119,3 +120,35 @@ class Discriminator(nn.Module):
 
     def forward(self, x):
         return self.main(x)
+
+
+class Model:
+    def __init__(
+        self,
+        cuda_enabled = False,
+        cuda_index = 0,
+        latent_size = 128,
+        channels = 3
+    ):
+        self.cuda_enabled = cuda_enabled
+        self.cuda_index = cuda_index
+        self.latent_size = latent_size
+        self.channels = channels
+        self.G = Generator(self.latent_size, self.channels)
+        self.D = Discriminator(self.channels)
+        self.loss = nn.BCELoss()
+        if self.cuda_enabled:
+            self.D.cuda(self.cuda_index)
+            self.G.cuda(self.cuda_index)
+            self.loss = nn.BCELoss().cuda(self.cuda_index)
+
+    def save(self, path):
+        path = Path(path).expanduser()
+        path.mkdir(mode=0x755, parents=True, exist_ok=True)
+        torch.save(self.G.state_dict(), path / 'g.pkl')
+        torch.save(self.D.state_dict(), path / 'd.pkl')
+
+    def load(self, path):
+        path = Path(path).expanduser()
+        self.G.load_state_dict(torch.load(path / 'g.pkl'))
+        self.D.load_state_dict(torch.load(path / 'd.pkl'))
