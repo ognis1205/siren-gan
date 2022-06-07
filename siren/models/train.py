@@ -1,6 +1,7 @@
 import torch
 import torch.nn.functional as F
-from ..data.utils import dump
+from tqdm import tqdm
+from siren.data.utils import dump
 
 
 def train_g(
@@ -16,7 +17,7 @@ def train_g(
     preds = model.D(imgs).to(device)
     targets = torch.ones(batch_size, 1).to(device)
     loss = F.binary_cross_entropy(preds, targets)
-    loss.backword()
+    loss.backward()
     opt_g.step()
     return loss.item(), latent
 
@@ -41,7 +42,7 @@ def train_d(
     fake_loss = F.binary_cross_entropy(fake_preds, fake_targets)
     fake_score = torch.mean(fake_preds).item()
     loss = real_loss + fake_loss
-    loss.backword()
+    loss.backward()
     opt_d.step()
     return loss.item(), real_score, fake_score
 
@@ -50,7 +51,7 @@ def fit(
     model,
     device,
     data_loader,
-    path,
+    path_to_dump,
     epochs = 100,
     lr = 0.0002,
     start_index = 1
@@ -90,8 +91,8 @@ def fit(
             f'fake_score: {fake_score}')
         dump(
             model,
-            devive,
+            device,
             epoch + start_index,
             latent,
-            path,
+            path_to_dump,
             show=False)

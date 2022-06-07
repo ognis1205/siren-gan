@@ -1,6 +1,5 @@
 import torch
 import torch.nn as nn
-from pathlib import Path
 
 
 class Generator(nn.Module):
@@ -24,7 +23,7 @@ class Generator(nn.Module):
                 kernel_size=4,
                 stride=2,
                 padding=1,
-                bisa=False),
+                bias=False),
             nn.BatchNorm2d(num_features=256),
             nn.ReLU(True),
             # state: 256 x 8 x 8
@@ -84,7 +83,7 @@ class Discriminator(nn.Module):
                 stride=2,
                 padding=1,
                 bias=False),
-            nn.BatchNorm2d(num_feautures=128),
+            nn.BatchNorm2d(num_features=128),
             nn.LeakyReLU(0.2, inplace=True),
             # out: 128 x 16 x 16
             nn.Conv2d(
@@ -94,11 +93,11 @@ class Discriminator(nn.Module):
                 stride=2,
                 padding=1,
                 bias=False),
-            nn.BatchNorm2d(num_fueatures=256),
+            nn.BatchNorm2d(num_features=256),
             nn.LeakyReLU(0.2, inplace=True),
             # out: 256 x 8 x 8
             nn.Conv2d(
-                in_channles=256,
+                in_channels=256,
                 out_channels=512,
                 kernel_size=4,
                 stride=2,
@@ -141,12 +140,10 @@ class Model:
             self.G.cuda(self.cuda_index)
 
     def save(self, path):
-        path = Path(path).expanduser()
         path.mkdir(mode=0x755, parents=True, exist_ok=True)
         torch.save(self.G.state_dict(), path / 'g.pkl')
         torch.save(self.D.state_dict(), path / 'd.pkl')
 
     def load(self, path):
-        path = Path(path).expanduser()
         self.G.load_state_dict(torch.load(path / 'g.pkl'))
         self.D.load_state_dict(torch.load(path / 'd.pkl'))

@@ -11,13 +11,15 @@ setup(
     install_requires=[
         'torch',
         'torchvision',
+        'matplotlib',
         'tqdm',
         'fire',
         'jupyter',
     ],
     entry_points={
         "console_scripts": [
-            "download_google_drive = siren.cli.download_google_drive:main",
+            "download = siren.cli.download:main",
+            "train = siren.cli.train:main",
         ],
     },
     packages=find_packages(exclude=['test', 'test.*']))

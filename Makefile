@@ -7,10 +7,16 @@ requirements:
 	@pip install -U pip setuptools wheel
 	@pip install -r requirements.txt
 
+## Train Model
+train: data
+	@echo "Training GAN model"
+	@train dcgan $(ROOT)/data/raw/cats $(ROOT)/reports/figures/dcgan $(ROOT)/models/dcgan
+	@echo "Trained  GAN model: "$(ROOT)/models/dcgan
+
 ## Make Dataset
 data: install
 	@echo "Downloading cat image dataset"
-	@download_google_drive 1KTF-OLTxijRwPbcNJdNMHYcZtIqPKksp $(ROOT)/data/raw
+	@download 1KTF-OLTxijRwPbcNJdNMHYcZtIqPKksp $(ROOT)/data/raw
 	@echo "Downloaded cat image dataset: "$(ROOT)/data/raw/cats
 
 ## Delete all compiled Python files
