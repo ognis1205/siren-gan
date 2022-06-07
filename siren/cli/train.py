@@ -21,13 +21,18 @@ def train(target, path_to_data, path_to_dump, path_to_model):
         path_to_dump (str): The path to the data dump directory.
         path_to_model (str): The path to the model directory.
     """
+    path_to_data = Path(path_to_data).expanduser()
+    path_to_dump = Path(path_to_dump).expanduser()
+    path_to_dump.mkdir(parents=True, exist_ok=True)
+    path_to_model = Path(path_to_model).expanduser()
+    path_to_model.mkdir(parents=True, exist_ok=True)
     model = get_model(target)
     fit(
         model,
         get_device(),
-        load(Path(path_to_data).expanduser()),
-        Path(path_to_dump).expanduser())
-    model.save(Path(path_to_model).expanduser())
+        load(path_to_data),
+        path_to_dump)
+    model.save(path_to_model)
 
 
 def get_model(target, **kargs):

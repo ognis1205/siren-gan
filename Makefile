@@ -8,7 +8,7 @@ requirements:
 	@pip install -r requirements.txt
 
 ## Train Model
-train: data
+dcgan: data
 	@echo "Training GAN model"
 	@train dcgan $(ROOT)/data/raw/cats $(ROOT)/reports/figures/dcgan $(ROOT)/models/dcgan
 	@echo "Trained  GAN model: "$(ROOT)/models/dcgan

@@ -140,7 +140,6 @@ class Model:
             self.G.cuda(self.cuda_index)
 
     def save(self, path):
-        path.mkdir(mode=0x755, parents=True, exist_ok=True)
         torch.save(self.G.state_dict(), path / 'g.pkl')
         torch.save(self.D.state_dict(), path / 'd.pkl')
 
