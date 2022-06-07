@@ -53,7 +53,7 @@ def save(response, path):
             zipped.extractall(path)
 
 
-if __name__ == '__main__':
+def main():
     try:
         fire.Fire(download_google_drive)
     except Exception:

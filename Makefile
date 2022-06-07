@@ -8,9 +8,9 @@ requirements:
 	@pip install -r requirements.txt
 
 ## Make Dataset
-data: requirements
+data: install
 	@echo "Downloading cat image dataset"
-	@python ./bin/download_google_drive.py 1KTF-OLTxijRwPbcNJdNMHYcZtIqPKksp $(ROOT)/data/raw
+	@download_google_drive 1KTF-OLTxijRwPbcNJdNMHYcZtIqPKksp $(ROOT)/data/raw
 	@echo "Downloaded cat image dataset: "$(ROOT)/data/raw/cats
 
 ## Delete all compiled Python files

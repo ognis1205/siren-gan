@@ -13,6 +13,11 @@ setup(
         'torchvision',
         'tqdm',
         'fire',
-        'jupyter'
+        'jupyter',
     ],
+    entry_points={
+        "console_scripts": [
+            "download_google_drive = siren.cli.download_google_drive:main",
+        ],
+    },
     packages=find_packages(exclude=['test', 'test.*']))
