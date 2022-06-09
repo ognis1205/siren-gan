@@ -3,7 +3,7 @@ import torch.nn as nn
 import numpy as np
 
 
-class Sine(nn.Module)
+class Sine(nn.Module):
     def __init__(
         self,
         in_features,

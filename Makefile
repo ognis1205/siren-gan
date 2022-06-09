@@ -9,9 +9,15 @@ requirements:
 
 ## Train Model
 dcgan: data
-	@echo "Training GAN model"
+	@echo "Training DCGAN model"
 	@train dcgan $(ROOT)/data/raw/cats $(ROOT)/reports/figures/dcgan $(ROOT)/models/dcgan
-	@echo "Trained  GAN model: "$(ROOT)/models/dcgan
+	@echo "Trained DCGAN model: "$(ROOT)/models/dcgan
+
+## Train Model
+sirengan: data
+	@echo "Training SIRENGAN model"
+	@train dcgan $(ROOT)/data/raw/cats $(ROOT)/reports/figures/sirengan $(ROOT)/models/sirengan
+	@echo "Trained SIRENGAN model: "$(ROOT)/models/sirengan
 
 ## Make Dataset
 data: install
