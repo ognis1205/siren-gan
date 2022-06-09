@@ -54,7 +54,7 @@ class Generator(nn.Module):
                 stride=2,
                 padding=1,
                 bias=False),
-            # out: channel x 64 x 64
+            # out: 64 x 64 x channel
             nn.Tanh())
 
     def forward(self, x):
@@ -65,7 +65,7 @@ class Discriminator(nn.Module):
     def __init__(self, channels = 3):
         super().__init__()
         self.main = nn.Sequential(
-            # in: 3 x 64 x 64
+            # in: 64 x 64 x 3
             nn.Conv2d(
                 in_channels=channels,
                 out_channels=64,
@@ -75,7 +75,7 @@ class Discriminator(nn.Module):
                 bias=False),
             nn.BatchNorm2d(num_features=64),
             nn.LeakyReLU(0.2, inplace=True),
-            # out: 64 x 32 x 32
+            # out: 32 x 32 x 64
             nn.Conv2d(
                 in_channels=64,
                 out_channels=128,
@@ -85,7 +85,7 @@ class Discriminator(nn.Module):
                 bias=False),
             nn.BatchNorm2d(num_features=128),
             nn.LeakyReLU(0.2, inplace=True),
-            # out: 128 x 16 x 16
+            # out: 16 x 16 x 128
             nn.Conv2d(
                 in_channels=128,
                 out_channels=256,
@@ -95,7 +95,7 @@ class Discriminator(nn.Module):
                 bias=False),
             nn.BatchNorm2d(num_features=256),
             nn.LeakyReLU(0.2, inplace=True),
-            # out: 256 x 8 x 8
+            # out: 8 x 8 x 256
             nn.Conv2d(
                 in_channels=256,
                 out_channels=512,
@@ -105,7 +105,7 @@ class Discriminator(nn.Module):
                 bias=False),
             nn.BatchNorm2d(num_features=512),
             nn.LeakyReLU(0.2, inplace=True),
-            # out: 512 x 4 x 4
+            # out: 4 x 4 x 512
             nn.Conv2d(
                 in_channels=512,
                 out_channels=1,

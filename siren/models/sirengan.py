@@ -30,8 +30,8 @@ class Sine(nn.Module)
                     -np.sqrt(6 / self.in_features) / self.omega_0, 
                      np.sqrt(6 / self.in_features) / self.omega_0)
         
-    def forward(self, input):
-        return torch.sin(self.omega_0 * self.linear(input))
+    def forward(self, x):
+        return torch.sin(self.omega_0 * self.linear(x))
 
 
 class Generator(nn.Module):
@@ -42,7 +42,7 @@ class Generator(nn.Module):
         channels = 3,
         hidden_features = 64,
         hidden_layers = 4,
-        outermost_linear=True, 
+        outermost_linear=False,
         omega=30
     ):
         super().__init__()
@@ -92,7 +92,7 @@ class Generator(nn.Module):
             self.main.append(final_layer)
 
         self.main = nn.Sequential(*self.main)
-        self.output = nn.Tanh()
+#        self.output = nn.Tanh()
 
     def forward(self, x):
         batch_size = x.shape[0]
@@ -101,4 +101,95 @@ class Generator(nn.Module):
         x = self.main(torch.cat((grid, x), 1))
         x = x.view(batch_size, self.dim, self.dim, self.channels)
         x = x.permute(0, 3, 1, 2)
-        return self.output(x)
+        return x
+#        return self.output(x)
+
+
+class Discriminator(nn.Module):
+    def __init__(self, channels = 3):
+        super().__init__()
+        self.main = nn.Sequential(
+            # in: 64 x 64 x 3
+            nn.Conv2d(
+                in_channels=channels,
+                out_channels=64,
+                kernel_size=4,
+                stride=2,
+                padding=1,
+                bias=False),
+            nn.BatchNorm2d(num_features=64),
+            nn.LeakyReLU(0.2, inplace=True),
+            # out: 32 x 32 x 64
+            nn.Conv2d(
+                in_channels=64,
+                out_channels=128,
+                kernel_size=4,
+                stride=2,
+                padding=1,
+                bias=False),
+            nn.BatchNorm2d(num_features=128),
+            nn.LeakyReLU(0.2, inplace=True),
+            # out: 16 x 16 x 128
+            nn.Conv2d(
+                in_channels=128,
+                out_channels=256,
+                kernel_size=4,
+                stride=2,
+                padding=1,
+                bias=False),
+            nn.BatchNorm2d(num_features=256),
+            nn.LeakyReLU(0.2, inplace=True),
+            # out: 8 x 8 x 256
+            nn.Conv2d(
+                in_channels=256,
+                out_channels=512,
+                kernel_size=4,
+                stride=2,
+                padding=1,
+                bias=False),
+            nn.BatchNorm2d(num_features=512),
+            nn.LeakyReLU(0.2, inplace=True),
+            # out: 4 x 4 x 512
+            nn.Conv2d(
+                in_channels=512,
+                out_channels=1,
+                kernel_size=4,
+                stride=1,
+                padding=0,
+                bias=False),
+            # out: 1 x 1 x 1
+            nn.Flatten(),
+            nn.Sigmoid())
+
+    def forward(self, x):
+        return self.main(x)
+
+
+class Model:
+    def __init__(
+        self,
+        cuda_enabled = False,
+        cuda_index = 0,
+        latent_size = 2,
+        channels = 3
+    ):
+        self.cuda_enabled = cuda_enabled
+        self.cuda_index = cuda_index
+        self.latent_size = latent_size
+        self.channels = channels
+        self.G = Generator(
+            latent_size = self.latent_size,
+            channels = self.channels)
+        self.D = Discriminator(
+            channels = self.channels)
+        if self.cuda_enabled:
+            self.D.cuda(self.cuda_index)
+            self.G.cuda(self.cuda_index)
+
+    def save(self, path):
+        torch.save(self.G.state_dict(), path / 'g.pkl')
+        torch.save(self.D.state_dict(), path / 'd.pkl')
+
+    def load(self, path):
+        self.G.load_state_dict(torch.load(path / 'g.pkl'))
+        self.D.load_state_dict(torch.load(path / 'd.pkl'))
