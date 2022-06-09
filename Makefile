@@ -16,7 +16,7 @@ dcgan: data
 ## Train Model
 sirengan: data
 	@echo "Training SIRENGAN model"
-	@train dcgan $(ROOT)/data/raw/cats $(ROOT)/reports/figures/sirengan $(ROOT)/models/sirengan
+	@train sirengan $(ROOT)/data/raw/cats $(ROOT)/reports/figures/sirengan $(ROOT)/models/sirengan
 	@echo "Trained SIRENGAN model: "$(ROOT)/models/sirengan
 
 ## Make Dataset
