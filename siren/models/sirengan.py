@@ -32,3 +32,73 @@ class Sine(nn.Module)
         
     def forward(self, input):
         return torch.sin(self.omega_0 * self.linear(input))
+
+
+class Generator(nn.Module):
+    def __init__(
+        self,
+        dim = 64,
+        channels = 3,
+        in_features = 4,
+        hidden_features = 64,
+        hidden_layers = 4,
+        outermost_linear=True, 
+        omega=30
+    ):
+        super().__init__()
+        self.dim = dim
+        self.omega = omega
+        self.hidden_layers = hidden_layers
+        self.hidden_features = hidden_features
+        self.main = []
+
+        grid = np.zeros((self.dim * self.dim, 2))
+        for i in range(self.dim):
+            for j in range(self.dim):
+                grid[i * self.dim + j][0] = -1 + (2 / self.dim) * i 
+                grid[i * self.dim + j][1] = -1 + (2 / self.dim) * j
+        self.grid = torch.from_numpy(grid).float().cuda()
+
+        first_layer = Sine(
+            in_features,
+            hidden_features,
+            is_first=True,
+            omega_0=omega)
+        self.main.append(first_layer)
+
+        for i in range(hidden_layers):
+            hidden_layer = Sine(
+                hidden_features,
+                hidden_features, 
+                is_first=False,
+                omega_0=omega)
+            self.main.append(hidden_layer)
+
+        if outermost_linear:
+            final_layer = nn.Linear(
+                hidden_features,
+                channels)
+            with torch.no_grad():
+                final_layer.weight.uniform_(
+                    -np.sqrt(6 / hidden_features) / omega, 
+                    np.sqrt(6 / hidden_features) / omega)
+            self.main.append(final_layer)
+        else:
+            final_layer = Sine(
+                hidden_features,
+                channels, 
+                is_first=False,
+                omega_0=omega)
+            self.main.append(final_layer)
+
+        self.main = nn.Sequential(*self.main)
+        self.output = nn.Tanh()
+
+    def forward(self, x):
+        batch_size = x.shape[0]
+        x = torch.repeat_interleave(x, self.dim * self.dim, dim = 0)
+        grid = self.positional_encoding(self.grid).repeat((batch_size, 1))
+        x = self.main(x + grid)
+        x = x.view(batch_size, self.dim, self.dim, self.channels)
+        x = x.permute(0, 3, 1, 2)
+        return self.output(x)
