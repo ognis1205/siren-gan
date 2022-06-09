@@ -38,8 +38,8 @@ class Generator(nn.Module):
     def __init__(
         self,
         dim = 64,
+        latent_size = 2,
         channels = 3,
-        in_features = 4,
         hidden_features = 64,
         hidden_layers = 4,
         outermost_linear=True, 
@@ -60,7 +60,7 @@ class Generator(nn.Module):
         self.grid = torch.from_numpy(grid).float().cuda()
 
         first_layer = Sine(
-            in_features,
+            2 + latent_size,
             hidden_features,
             is_first=True,
             omega_0=omega)
@@ -97,8 +97,8 @@ class Generator(nn.Module):
     def forward(self, x):
         batch_size = x.shape[0]
         x = torch.repeat_interleave(x, self.dim * self.dim, dim = 0)
-        grid = self.positional_encoding(self.grid).repeat((batch_size, 1))
-        x = self.main(x + grid)
+        grid = self.grid.repeat((batch_size, 1))
+        x = self.main(torch.cat((grid, x), 1))
         x = x.view(batch_size, self.dim, self.dim, self.channels)
         x = x.permute(0, 3, 1, 2)
         return self.output(x)
