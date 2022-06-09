@@ -17,3 +17,9 @@ def mat4(ws):
   mat = 'mat4(' + ','.join([f'{w:.4g}' for w in np.transpose(ws).flatten()]) + ')'
   mat = re.sub(r'\b0\.', '.', mat)
   return mat
+
+
+def serialize(siren, var):
+    # layer 1.
+    omega = siren.omega
+    chunks = int(siren.hidden_)
