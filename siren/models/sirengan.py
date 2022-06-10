@@ -92,7 +92,6 @@ class Generator(nn.Module):
             self.main.append(final_layer)
 
         self.main = nn.Sequential(*self.main)
-#        self.output = nn.Tanh()
 
     def forward(self, x):
         batch_size = x.shape[0]
@@ -102,7 +101,6 @@ class Generator(nn.Module):
         x = x.view(batch_size, self.dim, self.dim, self.channels)
         x = x.permute(0, 3, 1, 2)
         return x
-#        return self.output(x)
 
 
 class Discriminator(nn.Module):
