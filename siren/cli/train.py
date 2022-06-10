@@ -10,7 +10,7 @@ from siren.models.sirengan import Model as SIRENGAN
 from siren.models.train import fit
 
 
-class Target(enum.Enum):
+class Target(str, enum.Enum):
     DCGAN = 'dcgan'
     SIRENGAN = 'sirengan'
 
@@ -34,15 +34,18 @@ def train(target, path_to_data, path_to_dump, path_to_model):
         get_device(),
         load(path_to_data),
         path_to_dump,
-        epochs=10)
+        epochs=3)
     model.save(path_to_model)
 
 
 def get_model(target, **kargs):
     if target == Target.DCGAN:
+        print('DCGAN model specified')
         return DCGAN(**kargs)
     elif target == Target.SIRENGAN:
+        print('SIRENGAN model specified')
         return SIRENGAN(**kargs)
+    print('Default model (DCGAN) specified')
     return DCGAN(**kargs)
 
 

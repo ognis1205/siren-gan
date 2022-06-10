@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 
 
 class Generator(nn.Module):
@@ -138,6 +139,34 @@ class Model:
         if self.cuda_enabled:
             self.D.cuda(self.cuda_index)
             self.G.cuda(self.cuda_index)
+
+    def train_g(self, device, batch_size, optimizer):
+        optimizer.zero_grad()
+        z = torch.randn(batch_size, self.latent_size, 1, 1).to(device)
+        i = self.G(z).to(device)
+        p = self.D(i).to(device)
+        t = torch.ones(batch_size, 1).to(device)
+        loss = F.binary_cross_entropy(p, t)
+        loss.backward()
+        optimizer.step()
+        return loss.item(), z
+
+    def train_d(self, device, batch_size, optimizer, x):
+        optimizer.zero_grad()
+        rp = self.D(x).to(device)
+        rt = torch.ones(x.size(0), 1).to(device)
+        real_loss = F.binary_cross_entropy(rp, rt)
+        real_score = torch.mean(rp).item()
+        z = torch.randn(batch_size, self.latent_size, 1, 1).to(device)
+        fx = self.G(z).to(device)
+        fp = self.D(fx).to(device)
+        ft = torch.zeros(fx.size(0), 1).to(device)
+        fake_loss = F.binary_cross_entropy(fp, ft)
+        fake_score = torch.mean(fp).item()
+        loss = real_loss + fake_loss
+        loss.backward()
+        optimizer.step()
+        return loss.item(), real_score, fake_score
 
     def save(self, path):
         torch.save(self.G.state_dict(), path / 'g.pkl')
