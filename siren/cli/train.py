@@ -34,7 +34,7 @@ def train(target, path_to_data, path_to_dump, path_to_model):
         get_device(),
         load(path_to_data),
         path_to_dump,
-        epochs=3)
+        epochs=128)
     model.save(path_to_model)
 
 
