@@ -1,10 +1,16 @@
 import torch
+import matplotlib.pyplot as plt
 from torch.autograd import Variable
 from torchvision.utils import make_grid, save_image
 from siren.data.utils import denorm
 
 
-def generate(model, z, number_of_images, image_size = 64):
+def generate(
+    model,
+    z,
+    number_of_images,
+    image_size = 64
+):
     samples = model.G(z).data.cpu().numpy()[:number_of_images]
     generated = []
     for sample in samples:
@@ -15,7 +21,16 @@ def generate(model, z, number_of_images, image_size = 64):
     return generated
 
 
-def walk(model, zx, z1, z2, number_of_images, path_to_dump, image_size = 64):
+def walk(
+    model,
+    zx,
+    z1,
+    z2,
+    number_of_images,
+    path_to_dump,
+    image_size = 64,
+    show = True
+):
     if model.cuda_enabled:
         zx = zx.cuda()
         z1 = z1.cuda()
@@ -34,3 +49,8 @@ def walk(model, zx, z1, z2, number_of_images, path_to_dump, image_size = 64):
     save_image(
         grid,
         path_to_dump / 'interpolated.png')
+    if show:
+        fig, ax = plt.subplots(figsize=(8, 8))
+        ax.set_xticks([])
+        ax.set_yticks([])
+        ax.imshow(grid.permute(1, 2, 0))

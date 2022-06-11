@@ -23,3 +23,6 @@ def serialize(siren, var):
     # layer 1.
     omega = siren.omega
     chunks = int(siren.hidden_)
+    in_w = dump(siren.main[0].linear.weight)
+    in_b = dump(siren.main[0].inear.bias)
+    
