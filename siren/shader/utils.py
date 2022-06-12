@@ -49,7 +49,7 @@ def serialize(siren, var):
         layer_w = dump(siren.main[layer + 1].linear.weight)
         layer_b = dump(siren.main[layer + 1].linear.bias)
         for row in range(chunks):
-            line = f'vec4 {var}{layer + 1}_{row} = sin('
+            line = f'vec4 {var}{layer + 1}_{row} = sin(\n    '
             line += ' +\n    '.join([
                 f'{mat4(layer_w[row * 4:(row + 1) * 4, col * 4:(col + 1) * 4] * omega)}'
                 f' * {var}{layer}_{col}'
@@ -58,28 +58,14 @@ def serialize(siren, var):
             print(line)
 
     # output layer.
-    out_w = dump(siren.main[-1].weight[0])
-    out_b = dump(siren.main[-1].bias[0])
-    line = 'float r = '
-    for row in range(chunks):
-        line += f'dot({var}{siren.hidden_layers}_{row}, {vec4(out_w[row * 4:(row + 1) * 4] * .5)}) + \n    '
-    line += f'{out_b * .5 + .5:0.3f};'
-    print(line)
+    color = ['r', 'g', 'b']
+    for i in range(3):
+        out_w = dump(siren.main[-2].weight[i])
+        out_b = dump(siren.main[-2].bias[i])
+        line = f'float {color[i]} = \n    '
+        for row in range(chunks):
+            line += f'dot({var}{siren.hidden_layers}_{row}, {vec4(out_w[row * 4:(row + 1) * 4] * .5)}) + \n    '
+        line += f'{out_b * .5 + .5:0.3f};'
+        print(line)
 
-    out_w = dump(siren.main[-1].weight[1])
-    out_b = dump(siren.main[-1].bias[1])
-    line = 'float g = '
-    for row in range(chunks):
-        line += f'dot({var}{siren.hidden_layers}_{row}, {vec4(out_w[row * 4:(row + 1) * 4] * .5)}) + \n    '
-    line += f'{out_b * .5 + .5:0.3f};'
-    print(line)
-
-    out_w = dump(siren.main[-1].weight[2])
-    out_b = dump(siren.main[-1].bias[2])
-    line = 'float b = '
-    for row in range(chunks):
-        line += f'dot({var}{siren.hidden_layers}_{row}, {vec4(out_w[row * 4:(row + 1) * 4] * .5)}) + \n    '
-    line += f'{out_b * .5 + .5:0.3f};'
-    print(line)
-
-    print(f'return vec4(r, g, b, 1.0)')
+    print(f'return vec4(tanh(r), tanh(g), tanh(b), 1.0)')
