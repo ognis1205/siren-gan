@@ -15,10 +15,16 @@ class Target(str, enum.Enum):
     SIRENGAN = 'sirengan'
 
 
-def train(target, path_to_data, path_to_dump, path_to_model):
+class Dataset(str, enum.Enum):
+    CATS = 'cats'
+    MNIST = 'mnist'
+
+
+def train(target, dataset, path_to_data, path_to_dump, path_to_model):
     """Trains GAN models.
     Args:
         target (str): The target model to train.
+        dataset (str): The target dataset.
         path_to_data (str): The path to the data directory.
         path_to_dump (str): The path to the data dump directory.
         path_to_model (str): The path to the model directory.
@@ -28,7 +34,7 @@ def train(target, path_to_data, path_to_dump, path_to_model):
     path_to_dump.mkdir(parents=True, exist_ok=True)
     path_to_model = Path(path_to_model).expanduser()
     path_to_model.mkdir(parents=True, exist_ok=True)
-    model = get_model(target)
+    model = get_model(target, dataset)
     fit(
         model,
         get_device(),
@@ -38,15 +44,20 @@ def train(target, path_to_data, path_to_dump, path_to_model):
     model.save(path_to_model)
 
 
-def get_model(target, **kargs):
+def get_model(target, dataset, **kargs):
+    options = {}
+    if dataset == Dataset.CATS:
+        options = { 'channels': 3, 'dim': 64 }
+    elif dataset == Dataset.MNIST:
+        options = { 'channels': 1, 'dim': 28 }
     if target == Target.DCGAN:
         print('DCGAN model specified')
-        return DCGAN(**kargs)
+        return DCGAN(**options)
     elif target == Target.SIRENGAN:
         print('SIRENGAN model specified')
-        return SIRENGAN(**kargs)
+        return SIRENGAN(**options)
     print('Default model (DCGAN) specified')
-    return DCGAN(**kargs)
+    return DCGAN(**options)
 
 
 def get_device():

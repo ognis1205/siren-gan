@@ -128,11 +128,13 @@ class Model:
         cuda_enabled = False,
         cuda_index = 0,
         latent_size = 128,
+        dim = 64,
         channels = 3
     ):
         self.cuda_enabled = cuda_enabled
         self.cuda_index = cuda_index
         self.latent_size = latent_size
+        self.dim = 64
         self.channels = channels
         self.G = Generator(self.latent_size, self.channels)
         self.D = Discriminator(self.channels)

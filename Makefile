@@ -8,16 +8,16 @@ requirements:
 	@pip install -r requirements.txt
 
 ## Train Model
-dcgan: cats
-	@echo "Training DCGAN model"
-	@train dcgan $(ROOT)/data/raw/cats $(ROOT)/reports/figures/dcgan $(ROOT)/models/dcgan
-	@echo "Trained DCGAN model: "$(ROOT)/models/dcgan
+dcgan_cats: cats
+	@echo "Training DCGAN Cats model"
+	@train dcgan cats $(ROOT)/data/raw/cats $(ROOT)/reports/figures/dcgan_cats $(ROOT)/models/dcgan_cats
+	@echo "Trained DCGAN Cats model: "$(ROOT)/models/dcgan_cats
 
 ## Train Model
-sirengan: cats
-	@echo "Training SIRENGAN model"
-	@train sirengan $(ROOT)/data/raw/cats $(ROOT)/reports/figures/sirengan $(ROOT)/models/sirengan
-	@echo "Trained SIRENGAN model: "$(ROOT)/models/sirengan
+sirengan_cats: cats
+	@echo "Training SIRENGAN Cats model"
+	@train sirengan cats $(ROOT)/data/raw/cats $(ROOT)/reports/figures/sirengan_cats $(ROOT)/models/sirengan_cats
+	@echo "Trained SIRENGAN Cats model: "$(ROOT)/models/sirengan_cats
 
 ## Make MNIST Dataset
 mnist: install

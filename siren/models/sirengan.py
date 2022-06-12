@@ -43,7 +43,7 @@ class Generator(nn.Module):
         channels = 3,
         hidden_features = 64,
         hidden_layers = 2,
-        outermost_linear = False,
+        outermost_linear = True,
         omega = 30,
     ):
         super().__init__()
@@ -77,14 +77,15 @@ class Generator(nn.Module):
             self.main.append(hidden_layer)
 
         if outermost_linear:
-            final_layer = nn.Linear(
+            linear = nn.Linear(
                 hidden_features,
                 channels)
             with torch.no_grad():
-                final_layer.weight.uniform_(
+                linear.weight.uniform_(
                     -np.sqrt(6 / hidden_features) / omega, 
                     np.sqrt(6 / hidden_features) / omega)
-            self.main.append(final_layer)
+            self.main.append(linear)
+            self.main.append(nn.Tanh())
         else:
             final_layer = Sine(
                 hidden_features,
@@ -171,14 +172,17 @@ class Model:
         cuda_enabled = False,
         cuda_index = 0,
         latent_size = 2,
+        dim = 64,
         channels = 3
     ):
         self.cuda_enabled = cuda_enabled
         self.cuda_index = cuda_index
         self.latent_size = latent_size
+        self.dim = dim
         self.channels = channels
         self.G = Generator(
             latent_size = self.latent_size,
+            dim = self.dim,
             channels = self.channels)
         self.D = Discriminator(
             channels = self.channels)
