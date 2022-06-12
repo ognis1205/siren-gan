@@ -42,8 +42,8 @@ class Generator(nn.Module):
         latent_size = 2,
         channels = 3,
         hidden_features = 64,
-        hidden_layers = 4,
-        outermost_linear = True,
+        hidden_layers = 2,
+        outermost_linear = False,
         omega = 30,
     ):
         super().__init__()

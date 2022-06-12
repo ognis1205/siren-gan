@@ -8,21 +8,33 @@ requirements:
 	@pip install -r requirements.txt
 
 ## Train Model
-dcgan: data
+dcgan: cats
 	@echo "Training DCGAN model"
 	@train dcgan $(ROOT)/data/raw/cats $(ROOT)/reports/figures/dcgan $(ROOT)/models/dcgan
 	@echo "Trained DCGAN model: "$(ROOT)/models/dcgan
 
 ## Train Model
-sirengan: data
+sirengan: cats
 	@echo "Training SIRENGAN model"
 	@train sirengan $(ROOT)/data/raw/cats $(ROOT)/reports/figures/sirengan $(ROOT)/models/sirengan
 	@echo "Trained SIRENGAN model: "$(ROOT)/models/sirengan
 
-## Make Dataset
-data: install
+## Make MNIST Dataset
+mnist: install
+	@echo "Downloading MNIST dataset"
+	@download_url http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz train-images-idx3-ubyte $(ROOT)/data/raw/mnist
+	@echo "Downloaded  MNIST dataset: "$(ROOT)/data/raw/mnist/train-images-idx3-ubyte
+	@download_url http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz train-labels-idx1-ubyte $(ROOT)/data/raw/mnist
+	@echo "Downloaded  MNIST dataset: "$(ROOT)/data/raw/mnist/train-labels-idx1-ubyte
+	@download_url http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz t10k-images-idx3-ubyte $(ROOT)/data/raw/mnist
+	@echo "Downloaded  MNIST dataset: "$(ROOT)/data/raw/mnist/t10k-images-idx3-ubyte
+	@download_url http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz t10k-labels-idx1-ubyte $(ROOT)/data/raw/mnist
+	@echo "Downloaded  MNIST dataset: "$(ROOT)/data/raw/mnist/t10k-labels-idx1-ubyte
+
+## Make Cats Dataset
+cats: install
 	@echo "Downloading cat image dataset"
-	@download 1KTF-OLTxijRwPbcNJdNMHYcZtIqPKksp $(ROOT)/data/raw
+	@download_google_drive 1KTF-OLTxijRwPbcNJdNMHYcZtIqPKksp $(ROOT)/data/raw
 	@echo "Downloaded cat image dataset: "$(ROOT)/data/raw/cats
 
 ## Delete all compiled Python files

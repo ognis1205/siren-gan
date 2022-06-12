@@ -34,10 +34,14 @@ def serialize(siren, var):
         b = in_b[row * 4:(row + 1) * 4] * omega
         print(
             f'vec4 {var}0_{row} = sin('
-            f'uv.x * {vec4(x)} + '
-            f'uv.y * {vec4(y)} + '
-            f'z.x * {vec4(z)} + '
-            f'z.y * {vec4(w)} + '
+#            f'uv.x * {vec4(x)} + '
+#            f'uv.y * {vec4(y)} + '
+#            f'z.x * {vec4(z)} + '
+#            f'z.y * {vec4(w)} + '
+            f'p.x * {vec4(x)} + '
+            f'p.y * {vec4(y)} + '
+            f'p.z * {vec4(z)} + '
+            f'p.w * {vec4(w)} + '
             f'{vec4(b)});')
 
     # hidden layers.
@@ -77,3 +81,5 @@ def serialize(siren, var):
         line += f'dot({var}{siren.hidden_layers}_{row}, {vec4(out_w[row * 4:(row + 1) * 4] * .5)}) + \n    '
     line += f'{out_b * .5 + .5:0.3f};'
     print(line)
+
+    print(f'return vec4(r, g, b, 1.0)')

@@ -18,7 +18,8 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            "download = siren.cli.download:main",
+            "download_url = siren.cli.download_url:main",
+            "download_google_drive = siren.cli.download_google_drive:main",
             "train = siren.cli.train:main",
         ],
     },
