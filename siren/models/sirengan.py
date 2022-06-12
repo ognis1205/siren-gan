@@ -80,10 +80,10 @@ class Generator(nn.Module):
             linear = nn.Linear(
                 hidden_features,
                 channels)
-            with torch.no_grad():
-                linear.weight.uniform_(
-                    -np.sqrt(6 / hidden_features) / omega, 
-                    np.sqrt(6 / hidden_features) / omega)
+#            with torch.no_grad():
+#                linear.weight.uniform_(
+#                    -np.sqrt(6 / hidden_features) / omega, 
+#                    np.sqrt(6 / hidden_features) / omega)
             self.main.append(linear)
             self.main.append(nn.Tanh())
         else:
