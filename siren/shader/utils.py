@@ -46,9 +46,34 @@ def serialize(siren, var):
         layer_b = dump(siren.main[layer + 1].linear.bias)
         for row in range(chunks):
             line = f'vec4 {var}{layer + 1}_{row} = sin('
-            line += ' +\n'.join([
+            line += ' +\n    '.join([
                 f'{mat4(layer_w[row * 4:(row + 1) * 4, col * 4:(col + 1) * 4] * omega)}'
                 f' * {var}{layer}_{col}'
                 for col in range(chunks)])
-            line += f' +\n {vec4(layer_b[row * 4:(row + 1) * 4] * omega)});'
+            line += f' +\n    {vec4(layer_b[row * 4:(row + 1) * 4] * omega)});'
             print(line)
+
+    # output layer.
+    out_w = dump(siren.main[-1].weight[0])
+    out_b = dump(siren.main[-1].bias[0])
+    line = 'float r = '
+    for row in range(chunks):
+        line += f'dot({var}{siren.hidden_layers}_{row}, {vec4(out_w[row * 4:(row + 1) * 4] * .5)}) + \n    '
+    line += f'{out_b * .5 + .5:0.3f};'
+    print(line)
+
+    out_w = dump(siren.main[-1].weight[1])
+    out_b = dump(siren.main[-1].bias[1])
+    line = 'float g = '
+    for row in range(chunks):
+        line += f'dot({var}{siren.hidden_layers}_{row}, {vec4(out_w[row * 4:(row + 1) * 4] * .5)}) + \n    '
+    line += f'{out_b * .5 + .5:0.3f};'
+    print(line)
+
+    out_w = dump(siren.main[-1].weight[2])
+    out_b = dump(siren.main[-1].bias[2])
+    line = 'float b = '
+    for row in range(chunks):
+        line += f'dot({var}{siren.hidden_layers}_{row}, {vec4(out_w[row * 4:(row + 1) * 4] * .5)}) + \n    '
+    line += f'{out_b * .5 + .5:0.3f};'
+    print(line)

@@ -43,7 +43,7 @@ class Generator(nn.Module):
         channels = 3,
         hidden_features = 64,
         hidden_layers = 4,
-        outermost_linear = False,
+        outermost_linear = True,
         omega = 30,
     ):
         super().__init__()
@@ -59,7 +59,6 @@ class Generator(nn.Module):
             for j in range(self.dim):
                 grid[i * self.dim + j][0] = -1 + (2 / self.dim) * i 
                 grid[i * self.dim + j][1] = -1 + (2 / self.dim) * j
-#        self.grid = torch.from_numpy(grid).float().cuda()
         self.grid = torch.from_numpy(grid).float()
 
         first_layer = Sine(
