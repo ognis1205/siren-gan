@@ -58,14 +58,22 @@ def serialize(siren, var):
             print(line)
 
     # output layer.
-    color = ['r', 'g', 'b']
-    for i in range(3):
-        out_w = dump(siren.main[-2].weight[i])
-        out_b = dump(siren.main[-2].bias[i])
-        line = f'float {color[i]} = \n    '
-        for row in range(chunks):
-            line += f'dot({var}{siren.hidden_layers}_{row}, {vec4(out_w[row * 4:(row + 1) * 4] * .5)}) + \n    '
-        line += f'{out_b * .5 + .5:0.3f};'
-        print(line)
+    out_w = dump(siren.main[-2].weight[0])
+    out_b = dump(siren.main[-2].bias[0])
+    line = f'float {var} = \n    '
+    for row in range(chunks):
+        line += f'dot({var}{siren.hidden_layers}_{row}, {vec4(out_w[row * 4:(row + 1) * 4] * .5)}) + \n    '
+    line += f'{out_b * .5 + .5:0.3f};'
+    print(line)
 
-    print(f'return vec4(tanh(r), tanh(g), tanh(b), 1.0);')
+#    color = ['r', 'g', 'b']
+#    for i in range(3):
+#        out_w = dump(siren.main[-2].weight[i])
+#        out_b = dump(siren.main[-2].bias[i])
+#        line = f'float {color[i]} = \n    '
+#        for row in range(chunks):
+#            line += f'dot({var}{siren.hidden_layers}_{row}, {vec4(out_w[row * 4:(row + 1) * 4] * .5)}) + \n    '
+#        line += f'{out_b * .5 + .5:0.3f};'
+#        print(line)
+
+    print(f'return vec4(tanh({var}), tanh({var}), tanh({var}), 1.0);')
