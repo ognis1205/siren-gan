@@ -19,6 +19,18 @@ sirengan_cats: cats
 	@train sirengan cats $(ROOT)/data/raw/cats $(ROOT)/reports/figures/sirengan_cats $(ROOT)/models/sirengan_cats
 	@echo "Trained SIRENGAN Cats model: "$(ROOT)/models/sirengan_cats
 
+## Train Model
+dcgan_mnist: mnist
+	@echo "Training DCGAN MNIST model"
+	@train dcgan mnist $(ROOT)/data/raw/mnist $(ROOT)/reports/figures/dcgan_mnist $(ROOT)/models/dcgan_mnist $(ROOT)/data/processed/mnist
+	@echo "Trained DCGAN MNIST model: "$(ROOT)/models/dcgan_mnist
+
+## Train Model
+sirengan_mnist: mnist
+	@echo "Training SIRENGAN MNIST model"
+	@train sirengan mnist $(ROOT)/data/raw/mnist $(ROOT)/reports/figures/sirengan_mnist $(ROOT)/models/sirengan_mnist $(ROOT)/data/processed/mnist
+	@echo "Trained SIRENGAN MNIST model: "$(ROOT)/models/sirengan_mnist
+
 ## Make MNIST Dataset
 mnist: install
 	@echo "Downloading MNIST dataset"

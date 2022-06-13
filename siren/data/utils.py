@@ -3,9 +3,10 @@ import matplotlib.pyplot as plt
 from torch.utils.data import DataLoader
 from torchvision.datasets import ImageFolder
 from torchvision.utils import make_grid, save_image
+from siren.data.mnist import MNIST
 
 
-def load(
+def load_cats(
     path,
     image_size = 64,
     batch_size = 128
@@ -14,7 +15,7 @@ def load(
         tt.Resize(image_size),
         tt.CenterCrop(image_size),
         tt.ToTensor(),
-        tt.Normalize(*STATS)])
+        tt.Normalize(*STATS_CATS)])
     folder = ImageFolder(
         path,
         transform=transform)
@@ -26,10 +27,36 @@ def load(
         pin_memory=True)
 
 
-STATS = (0.5, 0.5, 0.5), (0.5, 0.5, 0.5)
+def load_mnist(
+    path_to_raw,
+    path_to_processed,
+    image_size = 64,
+    batch_size = 128
+):
+    transform = tt.Compose([
+        tt.Resize(image_size),
+        tt.CenterCrop(image_size),
+        tt.ToTensor(),
+        tt.Normalize(*STATS_MNIST)])
+    mnist = MNIST(
+        path_to_raw,
+        path_to_processed,
+        train=False,
+        transform = transform)
+    return DataLoader(
+        mnist,
+        batch_size,
+        shuffle=True,
+        num_workers=3,
+        pin_memory=True)
+
+
+STATS_CATS = (0.5, 0.5, 0.5), (0.5, 0.5, 0.5)
+
+STATS_MNIST = (0.5), (0.5)
 
 def denorm(img):
-    return img * STATS[1][0] + STATS[0][0]
+    return img * 0.5 + 0.5
 
 
 def dump(

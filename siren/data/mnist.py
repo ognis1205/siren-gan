@@ -36,7 +36,7 @@ def images(path):
                 for c in range(cols):
                     row.append(to_byte(d[idx]))
                     idx += 1
-                    return torch.ByteTensor(imgs).view(-1, 28, 28)
+        return torch.ByteTensor(imgs).view(-1, 28, 28)
 
 
 class MNIST(data.Dataset):

@@ -101,8 +101,13 @@ class Generator(nn.Module):
         x = torch.repeat_interleave(x, self.dim * self.dim, dim = 0)
         grid = self.grid.repeat((batch_size, 1))
         x = self.main(torch.cat((grid, x), 1))
-        x = x.view(batch_size, self.dim, self.dim, self.channels)
-        x = x.permute(0, 3, 1, 2)
+        if self.channels > 1:
+            x = x.view(batch_size, self.dim, self.dim, self.channels)
+            x = x.permute(0, 3, 1, 2)
+        else:
+            x = x.view(batch_size, self.dim, self.dim)
+            x = x[:, :, :, None]
+            x = x.permute(0, 3, 1, 2)
         return x
 
 
@@ -173,17 +178,20 @@ class Model:
         cuda_index = 0,
         latent_size = 2,
         dim = 64,
-        channels = 3
+        channels = 3,
+        hidden_features = 28,
     ):
         self.cuda_enabled = cuda_enabled
         self.cuda_index = cuda_index
         self.latent_size = latent_size
         self.dim = dim
         self.channels = channels
+        self.hidden_features = hidden_features
         self.G = Generator(
             latent_size = self.latent_size,
             dim = self.dim,
-            channels = self.channels)
+            channels = self.channels,
+            hidden_features = self.hidden_features)
         self.D = Discriminator(
             channels = self.channels)
         if self.cuda_enabled:

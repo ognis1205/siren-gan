@@ -28,7 +28,7 @@ def serialize(siren, var):
     in_b = dump(siren.main[0].linear.bias)
     for row in range(chunks):
         x = in_w[row * 4:(row + 1) * 4, 0] * omega
-        y = in_w[row * 4:(row + 1) * 4, 1] * omega
+        y = in_w[row * 4:(row + 1) * 4, 1] * -1 * omega
         z = in_w[row * 4:(row + 1) * 4, 2] * omega
         w = in_w[row * 4:(row + 1) * 4, 3] * omega
         b = in_b[row * 4:(row + 1) * 4] * omega
@@ -68,4 +68,4 @@ def serialize(siren, var):
         line += f'{out_b * .5 + .5:0.3f};'
         print(line)
 
-    print(f'return vec4(tanh(r), tanh(g), tanh(b), 1.0)')
+    print(f'return vec4(tanh(r), tanh(g), tanh(b), 1.0);')
