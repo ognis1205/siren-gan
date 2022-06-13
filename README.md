@@ -1,7 +1,7 @@
 siren-gan
 ==============================
 
-PoC Project of SIREN GAN
+PoC Project of SIREN GAN implemented in GLSL
 
 Project Organization
 ------------
