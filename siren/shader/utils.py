@@ -33,15 +33,15 @@ def serialize(siren, var):
         w = in_w[row * 4:(row + 1) * 4, 3] * omega
         b = in_b[row * 4:(row + 1) * 4] * omega
         print(
-            f'vec4 {var}0_{row} = sin('
-#            f'uv.x * {vec4(x)} + '
-#            f'uv.y * {vec4(y)} + '
-#            f'z.x * {vec4(z)} + '
-#            f'z.y * {vec4(w)} + '
-            f'p.x * {vec4(x)} + '
-            f'p.y * {vec4(y)} + '
-            f'p.z * {vec4(z)} + '
-            f'p.w * {vec4(w)} + '
+            f'vec4 {var}0_{row} = sin(\n    '
+#            f'uv.x * {vec4(x)} + \n    '
+#            f'uv.y * {vec4(y)} + \n    '
+#            f'z.x * {vec4(z)} + \n    '
+#            f'z.y * {vec4(w)} + \n    '
+            f'p.x * {vec4(x)} + \n    '
+            f'p.y * {vec4(y)} + \n    '
+            f'p.z * {vec4(z)} + \n    '
+            f'p.w * {vec4(w)} + \n    '
             f'{vec4(b)});')
 
     # hidden layers.
