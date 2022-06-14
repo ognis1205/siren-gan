@@ -42,7 +42,7 @@ class Generator(nn.Module):
         latent_size = 2,
         channels = 3,
         hidden_features = 64,
-        hidden_layers = 2,
+        hidden_layers = 3,
         outermost_linear = True,
         omega = 30,
     ):
@@ -179,7 +179,7 @@ class Model:
         latent_size = 2,
         dim = 64,
         channels = 3,
-        hidden_features = 28,
+        hidden_features = 32,
     ):
         self.cuda_enabled = cuda_enabled
         self.cuda_index = cuda_index
