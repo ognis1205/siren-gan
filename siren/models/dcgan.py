@@ -136,8 +136,11 @@ class Model:
         self.latent_size = latent_size
         self.dim = 64
         self.channels = channels
-        self.G = Generator(self.latent_size, self.channels)
-        self.D = Discriminator(self.channels)
+        self.G = Generator(
+            latent_size = self.latent_size,
+            channels = self.channels)
+        self.D = Discriminator(
+            channels = self.channels)
         if self.cuda_enabled:
             self.D.cuda(self.cuda_index)
             self.G.cuda(self.cuda_index)
