@@ -179,7 +179,7 @@ class Model:
         latent_size = 2,
         dim = 64,
         channels = 3,
-        hidden_features = 32,
+        hidden_features = 40,
     ):
         self.cuda_enabled = cuda_enabled
         self.cuda_index = cuda_index
