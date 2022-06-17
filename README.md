@@ -1,7 +1,7 @@
 siren-gan
 ==============================
 
-PoC Project of SIREN GAN implemented in GLSL
+PoC Project of SIREN GAN implemented in GLSL: [Shadertoy](https://www.shadertoy.com/view/fsGyWG)
 
 Project Organization
 ------------
