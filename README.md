@@ -1,7 +1,19 @@
-siren-gan
+SIREN-GAN
 ==============================
 
-PoC Project of SIREN GAN implemented in GLSL: [Shadertoy](https://www.shadertoy.com/view/fsGyWG)
+A PoC Project of the SIREN GAN implementation in GLSL: [Shadertoy](https://www.shadertoy.com/view/fsGyWG)
+
+Implementation Notes
+------------
+
+The concept of this project is to demonstrate how to "serialize" SIREN-based neural network models as GLSL codes.
+Hence, the further optimization of the model is out of the project scope, so the following hyper parameters are
+likely not be optimal:
+
+ - Batch size,
+ - Number of epochs,
+ - Latent space size,
+ - etc.
 
 Project Organization
 ------------
@@ -28,3 +40,9 @@ Project Organization
 
 
 --------
+
+References
+------------
+
+ - [Implicit Neural Representations with Periodic Activation Functions](https://arxiv.org/abs/2006.09661)
+ - [A Haphazard Tutorial for making Neural SDFs in Shadertoy](https://www.youtube.com/watch?v=8pwXpfi-0bU)
