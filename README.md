@@ -1,6 +1,10 @@
 SIREN-GAN
 ==============================
 
+<p align="center" float="left">
+  <img width="256" src="https://raw.githubusercontent.com/ognis1205/siren-gan/main/doc/images/dice.gif">
+</p>
+
 A PoC Project of the SIREN GAN implementation in GLSL: [Shadertoy](https://www.shadertoy.com/view/fsGyWG)
 
 Implementation Notes
