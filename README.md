@@ -49,4 +49,3 @@ References
 ------------
 
  - [Implicit Neural Representations with Periodic Activation Functions](https://arxiv.org/abs/2006.09661)
- - [A Haphazard Tutorial for making Neural SDFs in Shadertoy](https://www.youtube.com/watch?v=8pwXpfi-0bU)
